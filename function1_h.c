@@ -11,16 +11,26 @@ void input_analyzer(char *buf, char **env)
 {
 	char **wrd_array;
 	int accss;
+	int do_execv = 0;
 
 	wrd_array = tokenizer(buf, " \t");
 	if (wrd_array == NULL)
 		perror("Error");
 
-	accss = access(wrd_array[0], X_OK);
-	if (accss != 0)
-		perror("Error");
+	else if ((strcmp(wrd_array[0], "exit")) == 0)
+		exit_fx(wrd_array, buf);
+
 	else
-		forker(wrd_array, env);
+		do_execv == 1;
+
+	if (do_execv == 1)
+	{
+		accss = access(wrd_array[0], X_OK);
+		if (accss != 0)
+			perror("Error");
+		else
+			forker(wrd_array, env);
+	}
 }
 
 /**

@@ -109,7 +109,7 @@ void forker(char **buf, char **env)
 	if (proc == -1)
 		perror("Error");
 
-	else if(proc > 0) /*Parent*/
+	else if (proc > 0) /*Parent*/
 	{
 		do
 			wait(&status);

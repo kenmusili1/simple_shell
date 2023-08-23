@@ -27,7 +27,10 @@ int main(int argc, char **argv, char **env)
 			break;
 		}
 
-		fx();
+		if (lineptr[rd_ln - 1] == '\n')
+			lineptr[rd_ln - 1] = '\0';
+
+		input_analyzer(lineptr, env);
 	}
 
 	free(lineptr);

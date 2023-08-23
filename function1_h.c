@@ -6,7 +6,7 @@
  *
  * Return:
  */
-
+void (fx)
 {
 	return (0);
 }

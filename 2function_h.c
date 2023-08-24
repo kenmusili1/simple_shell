@@ -7,30 +7,84 @@
  *
  * Return: void
  */
+int path_f(char **str, char *pth)
+{
+	int i = 0, Alength, Tlength, st_t;
+	char **tkn;
+	struct stat cmd;
+	unsigned int n_sz, ol_sz;
 
+	tkn = tokenizer(pth, ":");
+	Alength = strlen(str[0]);
+
+	while (tkn[i])
+	{
+		Tlength = (strlen(tkn[i]) + 2);
+		n_sz = ((Tlength + Alength) * sizeof(char));
+		ol_sz = (strlen(tkn[i] + 1));
+
+		tkn[i] = reallocarray(tkn[i], ol_sz, n_sz);
+		if(tkn == NULL)
+			return (0);
+
+		strcat(tkn[i], "/");
+		strcat(tkn[i], str[0]);
+
+		st_t = stat(tkn[i], &cmd);
+
+		if (st_t == 0)
+		{
+			str[0] = reallocarray(tkn[0], Alength +1, n_sz);
+			if (tkn[0] == NULL)
+				return (0);
+
+			strcpy(str[0], tkn[i]);
+			_free(tkn);
+			return (1);
+		}
+
+		i++;
+	}
+
+	_free(tkn);
+	return (1);
+}
+
+/**
+ *exit_fx - The shell exit fx
+ *@str: Buffers to clear
+ *@buf: Buffers to clear
+ *
+ * Return: void
+ */
 void exit_fx(char **str, char *buf)
 {
-	exit_stat = atoi(str[1]);
+	unsigned int exit_stat = 0;
+	printf("str[1]: %s\n", str[1]);
 
-	if (str[1] == NULL || exit_stat == 0)
+	if (str[1] == NULL || strcmp(str[1], "0") == 0)
 	{
 		_free(str);
 		free(buf);
 		exit(0);
 	}
 
-	if (exit_stat < 0)
-	{
-		write(STOUT_FILENO, "exit: Illegal number: ", 22);
-		write(STOUT_FILENO, str[1], strlen(str[1]));
-		write(STOUT_FILENO, "\n", 1);
-	}
 
-	else
+	exit_stat = atoi(str[1]);
+
+	if (exit_stat > 0)
 	{
 		_free(str);
 		free(buf);
 		exit(exit_stat);
+	}
+
+else
+	{
+		write(STDOUT_FILENO, "exit: Illegal number: ", 22);
+		write(STDOUT_FILENO, str[1], strlen(str[1]));
+		write(STDOUT_FILENO, "\n", 1);
+		return;
 	}
 }
 
@@ -43,14 +97,24 @@ void exit_fx(char **str, char *buf)
 
 void _free(char **buf)
 {
-	char **holder;
-
-	holder = buf;
-
 	if (buf != NULL)
 	{
 		while (*buf)
-			free(*buf++)
-		free(holder);
+			free(*buf++);
 	}
+}
+
+char *found_pth(char **env)
+{
+	int i = 0;
+	char *envg = NULL;
+
+	while (env[i])
+	{
+		if (strncmp("PATH", env[i], 4) == 0)
+			envg = env[i] + 5;
+
+		i++;
+	}
+	return (envg);
 }

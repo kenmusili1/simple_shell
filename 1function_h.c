@@ -9,9 +9,12 @@
  */
 void input_analyzer(char *buf, char **env)
 {
-	char **wrd_array;
+	char **wrd_array, *pth = NULL;
 	int accss;
 	int do_execv = 0;
+	struct stat file_info;
+
+	pth = found_pth(env);
 
 	wrd_array = tokenizer(buf, " \t");
 	if (wrd_array == NULL)
@@ -20,8 +23,21 @@ void input_analyzer(char *buf, char **env)
 	else if ((strcmp(wrd_array[0], "exit")) == 0)
 		exit_fx(wrd_array, buf);
 
-	else
-		do_execv == 1;
+	else if ((strcmp(wrd_array[0], "env")) == 0)
+		prt_env(env);
+
+	else if (wrd_array[0][0] != '/' && do_execv == 0)
+	{
+		do_execv = path_f(wrd_array, pth);
+	}
+
+	if(do_execv == 0)
+	{
+		if (stat(wrd_array[0], &file_info) == 0)
+			do_execv = 1;
+		else
+			perror("Error");
+	}
 
 	if (do_execv == 1)
 	{
@@ -31,6 +47,8 @@ void input_analyzer(char *buf, char **env)
 		else
 			forker(wrd_array, env);
 	}
+	_free(wrd_array);
+	return;
 }
 
 /**
@@ -72,15 +90,17 @@ char **tokenizer(char *str, char *delim)
 
 	wrd = malloc((counter(str) + 1) * sizeof(char *));
 	if (wrd == NULL)
+	{
+		free(buf);
 		return (NULL);
-
+	}
 	strcpy(buf, str);
 	tkn = strtok(buf, delim);
 
-	while (tkn)
+	while (tkn != NULL)
 	{
 		wrd[i] = malloc((strlen(tkn) + 1) * sizeof(char));
-		if (wrd == NULL)
+		if (wrd[i] == NULL)
 		{
 			n = i;
 
@@ -91,10 +111,11 @@ char **tokenizer(char *str, char *delim)
 			}
 
 			free(wrd);
+			free(buf);
 			return (NULL);
 		}
 
-		strcpy(wrd[i], tkn);
+		strncpy(wrd[i], tkn, strlen(tkn) + 1);
 		tkn = strtok(NULL, delim);
 		i++;
 	}
@@ -129,4 +150,22 @@ void forker(char **buf, char **env)
 
 	else if	(proc == 0) /*Child*/
 		execve(buf[0], buf, env);
+}
+
+/**
+ *prt_env - Prints the current environment
+ *@env: Environment
+ *
+ * Return: void
+ */
+void prt_env(char **env)
+{
+	int i = 0;
+
+	while (env[i] != NULL)
+	{
+		write(STDOUT_FILENO, env, strlen(env[i]));
+		write(STDOUT_FILENO, "\n", 1);
+		i++;
+	}
 }

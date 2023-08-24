@@ -1,11 +1,11 @@
 #include "hshell.h"
 
 /**
- *exit_fx - The shell exit fx
- *@str: Buffers to clear
- *@buf: Buffers to clear
+ *path_f - Checks for path
+ *@str: Pointer to a string
+ *@pth: Pointer to a string
  *
- * Return: void
+ * Return: integer 1 if successful
  */
 int path_f(char **str, char *pth)
 {
@@ -24,7 +24,7 @@ int path_f(char **str, char *pth)
 		ol_sz = (strlen(tkn[i] + 1));
 
 		tkn[i] = reallocarray(tkn[i], ol_sz, n_sz);
-		if(tkn == NULL)
+		if (tkn == NULL)
 			return (0);
 
 		strcat(tkn[i], "/");
@@ -34,7 +34,7 @@ int path_f(char **str, char *pth)
 
 		if (st_t == 0)
 		{
-			str[0] = reallocarray(tkn[0], Alength +1, n_sz);
+			str[0] = reallocarray(tkn[0], Alength + 1, n_sz);
 			if (tkn[0] == NULL)
 				return (0);
 
@@ -60,7 +60,6 @@ int path_f(char **str, char *pth)
 void exit_fx(char **str, char *buf)
 {
 	unsigned int exit_stat = 0;
-	printf("str[1]: %s\n", str[1]);
 
 	if (str[1] == NULL || strcmp(str[1], "0") == 0)
 	{
@@ -94,7 +93,6 @@ else
  *
  * Return: void
  */
-
 void _free(char **buf)
 {
 	if (buf != NULL)
@@ -104,6 +102,12 @@ void _free(char **buf)
 	}
 }
 
+/**
+ *found_pth - Checks for path in PATH
+ *@env: environment array
+ *
+ * Return: Pointer to PATH
+ */
 char *found_pth(char **env)
 {
 	int i = 0;

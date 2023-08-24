@@ -15,23 +15,19 @@ void input_analyzer(char *buf, char **env)
 	struct stat file_info;
 
 	pth = found_pth(env);
-
 	wrd_array = tokenizer(buf, " \t");
 	if (wrd_array == NULL)
 		perror("Error");
-
 	else if ((strcmp(wrd_array[0], "exit")) == 0)
 		exit_fx(wrd_array, buf);
 
 	else if ((strcmp(wrd_array[0], "env")) == 0)
 		prt_env(env);
-
 	else if (wrd_array[0][0] != '/' && do_execv == 0)
 	{
 		do_execv = path_f(wrd_array, pth);
 	}
-
-	if(do_execv == 0)
+	if (do_execv == 0)
 	{
 		if (stat(wrd_array[0], &file_info) == 0)
 			do_execv = 1;
@@ -48,7 +44,6 @@ void input_analyzer(char *buf, char **env)
 			forker(wrd_array, env);
 	}
 	_free(wrd_array);
-	return;
 }
 
 /**
@@ -63,7 +58,7 @@ int counter(char *str)
 
 	while (str[i] != '\0')
 	{
-		if (str[i] == '\n' || str[i] == '\t' || str[i] == ' ')
+		if (str[i] == '\n' || str[i] == '\t' || str[i] == ' ' || str[i] == ':')
 			continue;
 		else
 			i++;
@@ -96,30 +91,25 @@ char **tokenizer(char *str, char *delim)
 	}
 	strcpy(buf, str);
 	tkn = strtok(buf, delim);
-
 	while (tkn != NULL)
 	{
 		wrd[i] = malloc((strlen(tkn) + 1) * sizeof(char));
 		if (wrd[i] == NULL)
 		{
 			n = i;
-
 			while (n >= 0)
 			{
 				free(wrd[n]);
 				n--;
 			}
-
 			free(wrd);
 			free(buf);
 			return (NULL);
 		}
-
 		strncpy(wrd[i], tkn, strlen(tkn) + 1);
 		tkn = strtok(NULL, delim);
 		i++;
 	}
-
 	wrd[i] = NULL;
 	free(buf);
 	return (wrd);

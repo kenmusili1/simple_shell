@@ -9,19 +9,19 @@
  */
 size_t path_f(char **str, char *pth)
 {
-	int i = 0, Alength, Tlength, st_t;
+	int i = 0, Alength, Tlength;
 	char **tkn;
 	struct stat cmd;
 	unsigned int n_sz, ol_sz;
 
-	tkn = tokenizer(pth, ":");
 	Alength = strlen(str[0]);
+	tkn = tokenizer(pth, ":");
 
 	while (tkn[i] != NULL)
 	{
+		ol_sz = (strlen(tkn[i] + 1));
 		Tlength = (strlen(tkn[i]) + 2);
 		n_sz = ((Tlength + Alength) * sizeof(char));
-		ol_sz = (strlen(tkn[i] + 1));
 
 		tkn[i] = reallocarray(tkn[i], ol_sz, n_sz);
 		if (tkn[i] == NULL)
@@ -30,16 +30,13 @@ size_t path_f(char **str, char *pth)
 		strcat(tkn[i], "/");
 		strcat(tkn[i], str[0]);
 
-		st_t = stat(tkn[i], &cmd);
-
-		if (st_t == 0)
+		if (stat(tkn[i], &cmd) == 0)
 		{
 			str[0] = reallocarray(tkn[0], Alength + 1, n_sz);
 			if (str[0] == NULL)
 				return(0);
 
 			strcpy(str[0], tkn[i]);
-			_free(tkn);
 			break;
 		}
 
@@ -79,7 +76,7 @@ void exit_fx(char **str, char *buf)
 
 else
 	{
-		write(STDOUT_FILENO, "exit: Illegal number: ", 22);
+		write(STDOUT_FILENO, "./hsh: 1: exit: Illegal number: ", 22);
 		write(STDOUT_FILENO, str[1], strlen(str[1]));
 		write(STDOUT_FILENO, "\n", 1);
 		return;
@@ -94,10 +91,16 @@ else
  */
 void _free(char **buf)
 {
+	char **holder;
+
 	if (buf != NULL)
 	{
+		holder = buf;
+
 		while (*buf)
 			free(*buf++);
+
+		free(holder);
 	}
 }
 
@@ -109,15 +112,15 @@ void _free(char **buf)
  */
 char *found_pth(char **env)
 {
-	int i = 0;
+	int n = 0;
 	char *envg = NULL;
 
-	while (env[i])
+	while (env[n])
 	{
-		if (strncmp("PATH=", env[i], 5) == 0)
-			envg = env[i] + 5;
+		if (strncmp("PATH=", env[n], 5) == 0)
+			envg = env[n] + 5;
 
-		i++;
+		n++;
 	}
 	return (envg);
 }

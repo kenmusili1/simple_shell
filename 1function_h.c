@@ -10,7 +10,7 @@
 void input_analyzer(char *buf, char **env)
 {
 	char **wrd_array, *pth = NULL;
-	int accss;
+	int accss, st_t;
 	size_t do_execv = 0;
 	struct stat file_info;
 
@@ -18,7 +18,7 @@ void input_analyzer(char *buf, char **env)
 
 	if (wrd_array[0] == NULL)
 	{
-		perror("Error");
+		perror("./hsh");
 		return;
 	}
 	else if ((strcmp(wrd_array[0], "exit")) == 0)
@@ -40,17 +40,18 @@ void input_analyzer(char *buf, char **env)
 
 	if (do_execv == 0)
 	{
-		if (stat(wrd_array[0], &file_info) == 0)
+		st_t = stat(wrd_array[0], &file_info);
+		if (st_t == 0)
 			do_execv = 1;
 		else
-			perror("Error");
+			perror("./hsh");
 	}
 
 	if (do_execv == 1)
 	{
 		accss = access(wrd_array[0], X_OK);
 		if (accss != 0)
-			perror("Error");
+			perror("./hsh");
 		else
 			forker(wrd_array, env);
 	}
@@ -149,7 +150,7 @@ void forker(char **buf, char **env)
 	pid_t proc = fork();
 
 	if (proc == -1)
-		perror("Error");
+		perror("./hsh");
 
 	else if (proc > 0) /*Parent*/
 	{
@@ -172,14 +173,18 @@ void forker(char **buf, char **env)
  *
  * Return: void
  */
-void prt_env(char **env)
+short int prt_env(char **env)
 {
-	int i = 0;
+	short int n = 0;
+	size_t arr_length;
 
-	while (env[i] != NULL)
+	arr_length = strlen(env[n]);
+
+	while (env[n] != NULL)
 	{
-		write(STDOUT_FILENO, env[i], strlen(env[i]));
+		write(STDOUT_FILENO, env[n], arr_length);
 		write(STDOUT_FILENO, "\n", 1);
-		i++;
+		n++;
 	}
+	return (0);
 }

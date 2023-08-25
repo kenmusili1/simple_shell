@@ -30,7 +30,7 @@ void _free(char **buf);
 
 size_t path_f(char **str, char *pth);
 
-void prt_env(char **env);
+short int prt_env(char **env);
 
 char *found_pth(char **env);
 

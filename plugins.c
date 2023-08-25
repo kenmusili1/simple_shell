@@ -2,7 +2,7 @@
 
 /**
  *ch_dir - Changes directory
- *@str: Command
+ *@str: Commands
  *
  * Return: void
  */
@@ -17,7 +17,7 @@ void ch_dir(char **str)
 		ch_error = chdir(getenv("HOME"));
 		if (ch_error == -1)
 		{
-			perror("1HHH./hsh");
+			perror("./hsh");
 			return;
 		}
 	}
@@ -27,7 +27,7 @@ void ch_dir(char **str)
 		ch_error = chdir(getenv("OLDPWD"));
 		if (ch_error == -1)
 		{
-			perror("222./hsh");
+			perror("./hsh");
 			return;
 		}
 	}
@@ -37,7 +37,7 @@ void ch_dir(char **str)
 		ch_error = chdir(strs[1]);
 		if (ch_error == -1)
 		{
-			perror("3333./hsh");
+			perror("./hsh");
 			return;
 		}
 	}

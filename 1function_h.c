@@ -98,6 +98,7 @@ char **tokenizer(char *str, char *delim)
 	char **wrd = NULL;
 	char *tkn, *buf;
 
+	end_null(str);
 	buf = malloc((strlen(str) + 1) * sizeof(char));
 	if (buf == NULL)
 		return (NULL);

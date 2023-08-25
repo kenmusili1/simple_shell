@@ -34,4 +34,6 @@ short int prt_env(char **env);
 
 char *found_pth(char **env);
 
+void end_null(char *str);
+
 #endif /*_HSHELL_*/

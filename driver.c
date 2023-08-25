@@ -24,7 +24,6 @@ void _isignal(int sig)
  */
 int main(int __attribute__((unused))argc, char **argv, char **env)
 {
-	int i;
 	ssize_t rd_ln = 1;
 	size_t n = 0;
 	char *lineptr = NULL;
@@ -45,24 +44,21 @@ int main(int __attribute__((unused))argc, char **argv, char **env)
 		}
 
 		if (counter(lineptr) > 0)
-		{	
-
-			i = 0;
-			while (lineptr[i])
-			{
-				if (lineptr[i] == '\n')
-				{
-					lineptr[i] = '\0';
-					break;
-				}
-				
-				i++;
-			}
-
 			input_analyzer(lineptr, env);
-		}
 	}
 
 	free(lineptr);
 	return (0);
+}
+
+void end_null(char *str)
+{
+	short int j = 0;
+
+	while (str[j])
+	{
+		if (str[j] == '\n')
+			str[j] = '\0';
+		j++;
+	}
 }

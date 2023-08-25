@@ -35,12 +35,12 @@ int main(int __attribute__((unused))argc, char **argv, char **env)
 	{
 		signal(SIGINT, _isignal);
 		if (isatty(STDIN_FILENO))
-			write(STDOUT_FILENO, "$ ", 2);
+			write(STDOUT_FILENO, "($) ", 4);
 
 		rd_ln = getline(&lineptr, &n, stdin);
 		if (rd_ln == -1)
 		{
-			perror("Error");
+			perror("./hsh");
 			write(STDOUT_FILENO, "\n", 1);
 			break;
 		}

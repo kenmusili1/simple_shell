@@ -8,6 +8,10 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <linux/limits.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <errno.h>
 
 /**
  *input_analyzer - Checks the array and does the approprate action
@@ -35,5 +39,9 @@ short int prt_env(char **env);
 char *found_pth(char **env);
 
 void end_null(char *str);
+
+void ch_dir(char **str);
+
+short int plugin(char **arg);
 
 #endif /*_HSHELL_*/

@@ -15,12 +15,15 @@ void input_analyzer(char *buf, char **env)
 	struct stat file_info;
 
 	wrd_array = tokenizer(buf, " \t");
-
 	if (wrd_array[0] == NULL)
 	{
 		perror("./hsh");
 		return;
 	}
+
+	if (plugin(wrd_array) == 1)
+		return;
+
 	else if ((strcmp(wrd_array[0], "exit")) == 0)
 	{
 		exit_fx(wrd_array, buf);

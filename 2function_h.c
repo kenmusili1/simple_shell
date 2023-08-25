@@ -19,9 +19,9 @@ size_t path_f(char **str, char *pth)
 
 	while (tkn[i] != NULL)
 	{
-		ol_sz = (strlen(tkn[i] + 1));
-		Tlength = (strlen(tkn[i]) + 2);
-		n_sz = ((Tlength + Alength) * sizeof(char));
+		ol_sz = strlen(tkn[i] + 1);
+		Tlength = strlen(tkn[i]) + 2;
+		n_sz = (Tlength + Alength) * sizeof(char);
 
 		tkn[i] = reallocarray(tkn[i], ol_sz, n_sz);
 		if (tkn[i] == NULL)
@@ -32,7 +32,7 @@ size_t path_f(char **str, char *pth)
 
 		if (stat(tkn[i], &cmd) == 0)
 		{
-			str[0] = reallocarray(tkn[0], Alength + 1, n_sz);
+			str[0] = reallocarray(str[0], Alength + 1, n_sz);
 			if (str[0] == NULL)
 				return(0);
 
@@ -112,12 +112,13 @@ void _free(char **buf)
  */
 char *found_pth(char **env)
 {
-	int n = 0;
 	char *envg = NULL;
+	int n = 0, cmp;
 
 	while (env[n])
 	{
-		if (strncmp("PATH=", env[n], 5) == 0)
+		cmp = strncmp("PATH", env[n], 4);
+		if (cmp == 0)
 			envg = env[n] + 5;
 
 		n++;

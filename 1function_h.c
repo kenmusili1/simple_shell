@@ -178,13 +178,12 @@ short int prt_env(char **env)
 	short int n = 0;
 	size_t arr_length;
 
-	arr_length = strlen(env[n]);
 
-	while (env[n] != NULL)
+	for (n = 0; env[n] != NULL; n++)
 	{
+		arr_length = strlen(env[n]);
 		write(STDOUT_FILENO, env[n], arr_length);
 		write(STDOUT_FILENO, "\n", 1);
-		n++;
 	}
 	return (0);
 }

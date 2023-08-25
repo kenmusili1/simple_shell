@@ -22,7 +22,10 @@ void input_analyzer(char *buf, char **env)
 	}
 
 	if (plugin(wrd_array) == 1)
+	{
+		_free(wrd_array);
 		return;
+	}
 
 	else if ((strcmp(wrd_array[0], "exit")) == 0)
 	{
@@ -33,6 +36,7 @@ void input_analyzer(char *buf, char **env)
 	else if ((strcmp(wrd_array[0], "env")) == 0)
 	{
 		prt_env(env);
+		_free(wrd_array);
 		return;
 	}
 

@@ -82,7 +82,7 @@ int counter(char *str)
 	{
 		if (str[i] == '\n' || str[i] == '\t' || str[i] == ' ' || str[i] == ':')
 			inWord = 0;
-		else if (inWord== 0)
+		else if (inWord == 0)
 		{
 			inWord = 1;
 			wrdCount++;

@@ -48,8 +48,8 @@ void ch_dir(char **str)
 }
 
 /**
- *ch_dir - Changes directory
- *@str: Commands
+ *_echo - executes /bin/echo command
+ *@command: commands from terminal
  *
  * Return: void
  */

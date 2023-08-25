@@ -34,7 +34,7 @@ size_t path_f(char **str, char *pth)
 		{
 			str[0] = reallocarray(str[0], Alength + 1, n_sz);
 			if (str[0] == NULL)
-				return(0);
+				return (0);
 
 			strcpy(str[0], tkn[i]);
 			break;
@@ -125,20 +125,3 @@ char *found_pth(char **env)
 	}
 	return (envg);
 }
-/*
-void no_prnter2(int i)
-{
-	unsigned int j = i;
-	char h = '-';
-
-	if (i < 0)
-	{
-		write(STDOUT_FILENO, &h, 1);
-		j = -j;
-	}
-	
-	if ((j / 10) > 0)
-		no_printer1(j / 10);
-
-	putchar(j % 10 + '0');
-}*/

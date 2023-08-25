@@ -18,7 +18,7 @@ void _isignal(int sig)
  *
  *@argc: Argument count
  *@argv: Pointer to an array of arguments from the CL
- *@env: Pointer to the array holding PATHS
+ *@env: Pointer to the array holding Environment PATH
  *
  * Return: Always 0
  */

@@ -125,3 +125,20 @@ char *found_pth(char **env)
 	}
 	return (envg);
 }
+
+void no_prnter2(int i)
+{
+	unsigned int j = i;
+	char h = '-';
+
+	if (i < 0)
+	{
+		write(STDOUT_FILENO, &h, 1);
+		j = -j;
+	}
+	
+	if ((j / 10) > 0)
+		no_printer1(j / 10);
+
+	putchar(j % 10 + '0');
+}

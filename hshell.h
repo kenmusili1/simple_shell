@@ -44,4 +44,10 @@ void ch_dir(char **str);
 
 short int plugin(char **arg);
 
+void no_prnter2(int i);
+
+void no_printer1(unsigned int i);
+
+void dollar_sit(char **str, int n);
+
 #endif /*_HSHELL_*/

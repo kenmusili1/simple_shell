@@ -17,5 +17,12 @@ short int plugin(char **arg)
 		plg_used = 1;
 	}
 
+	if (strcmp(args[0], "echo") == 0)
+	{
+		if (dollar_sit(args) == 1)
+			_echo(args);
+		plg_used = 1;
+	}
+
 	return (plg_used);
 }

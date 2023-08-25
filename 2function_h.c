@@ -125,7 +125,7 @@ char *found_pth(char **env)
 	}
 	return (envg);
 }
-
+/*
 void no_prnter2(int i)
 {
 	unsigned int j = i;
@@ -141,4 +141,4 @@ void no_prnter2(int i)
 		no_printer1(j / 10);
 
 	putchar(j % 10 + '0');
-}
+}*/

@@ -46,3 +46,43 @@ void ch_dir(char **str)
 	setenv("OLDPWD", getenv("PWD"), 1);
 	setenv("PWD", pth, 1);
 }
+
+/**
+ *ch_dir - Changes directory
+ *@str: Commands
+ *
+ * Return: void
+ */
+void _echo(char **command)
+{
+	pid_t proc, pr_child;
+	int status;
+	extern char **environ;
+
+	proc = fork();
+	if (proc < 0)
+	{
+		perror("./hsh");
+		return;
+	}
+
+	else if (proc == 0)
+	{
+		pr_child = execve("/bin/echo", command, environ);
+		if (pr_child == -1)
+		{
+			exit(EXIT_FAILURE);
+			return;
+		}
+		exit(EXIT_SUCCESS);
+		return;
+	}
+
+	else
+	{
+		do
+			waitpid(proc, &status, WUNTRACED);
+
+		while (!WIFEXITED(status) && !WIFSIGNALED(status));
+	}
+}

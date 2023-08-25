@@ -48,6 +48,8 @@ void no_prnter2(int i);
 
 void no_printer1(unsigned int i);
 
-void dollar_sit(char **str, int n);
+short int dollar_sit(char **str);
+
+void _echo(char **command);
 
 #endif /*_HSHELL_*/

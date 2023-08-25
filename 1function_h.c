@@ -11,22 +11,33 @@ void input_analyzer(char *buf, char **env)
 {
 	char **wrd_array, *pth = NULL;
 	int accss;
-	int do_execv = 0;
+	size_t do_execv = 0;
 	struct stat file_info;
 
-	pth = found_pth(env);
 	wrd_array = tokenizer(buf, " \t");
-	if (wrd_array == NULL)
+
+	if (wrd_array[0] == NULL)
+	{
 		perror("Error");
+		return;
+	}
 	else if ((strcmp(wrd_array[0], "exit")) == 0)
+	{
 		exit_fx(wrd_array, buf);
+		return;
+	}
 
 	else if ((strcmp(wrd_array[0], "env")) == 0)
-		prt_env(env);
-	else if (wrd_array[0][0] != '/' && do_execv == 0)
 	{
-		do_execv = path_f(wrd_array, pth);
+		prt_env(env);
+		return;
 	}
+
+	pth = found_pth(env);
+
+	if (wrd_array[0][0] != '/' && do_execv == 0)
+		do_execv = path_f(wrd_array, pth);
+
 	if (do_execv == 0)
 	{
 		if (stat(wrd_array[0], &file_info) == 0)
@@ -43,6 +54,7 @@ void input_analyzer(char *buf, char **env)
 		else
 			forker(wrd_array, env);
 	}
+
 	_free(wrd_array);
 }
 
@@ -55,13 +67,19 @@ void input_analyzer(char *buf, char **env)
 int counter(char *str)
 {
 	int i = 0;
+	int inWord = 0;
+	int wrdCount = 0;
 
 	while (str[i] != '\0')
 	{
 		if (str[i] == '\n' || str[i] == '\t' || str[i] == ' ' || str[i] == ':')
-			continue;
-		else
-			i++;
+			inWord = 0;
+		else if (inWord== 0)
+		{
+			inWord = 1;
+			wrdCount++;
+		}
+		i++;
 	}
 	return (i);
 }
@@ -89,8 +107,10 @@ char **tokenizer(char *str, char *delim)
 		free(buf);
 		return (NULL);
 	}
+
 	strcpy(buf, str);
 	tkn = strtok(buf, delim);
+
 	while (tkn != NULL)
 	{
 		wrd[i] = malloc((strlen(tkn) + 1) * sizeof(char));
@@ -103,13 +123,14 @@ char **tokenizer(char *str, char *delim)
 				n--;
 			}
 			free(wrd);
-			free(buf);
 			return (NULL);
 		}
-		strncpy(wrd[i], tkn, strlen(tkn) + 1);
+
+		strcpy(wrd[i], tkn);
 		tkn = strtok(NULL, delim);
 		i++;
 	}
+
 	wrd[i] = NULL;
 	free(buf);
 	return (wrd);
@@ -139,7 +160,10 @@ void forker(char **buf, char **env)
 	}
 
 	else if	(proc == 0) /*Child*/
+	{
 		execve(buf[0], buf, env);
+		printf("Child process has started!");
+	}
 }
 
 /**
@@ -154,7 +178,7 @@ void prt_env(char **env)
 
 	while (env[i] != NULL)
 	{
-		write(STDOUT_FILENO, env, strlen(env[i]));
+		write(STDOUT_FILENO, env[i], strlen(env[i]));
 		write(STDOUT_FILENO, "\n", 1);
 		i++;
 	}

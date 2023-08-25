@@ -28,7 +28,7 @@ void exit_fx(char **str, char *buf);
 
 void _free(char **buf);
 
-int path_f(char **str, char *pth);
+size_t path_f(char **str, char *pth);
 
 void prt_env(char **env);
 

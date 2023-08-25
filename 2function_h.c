@@ -7,7 +7,7 @@
  *
  * Return: integer 1 if successful
  */
-int path_f(char **str, char *pth)
+size_t path_f(char **str, char *pth)
 {
 	int i = 0, Alength, Tlength, st_t;
 	char **tkn;
@@ -17,14 +17,14 @@ int path_f(char **str, char *pth)
 	tkn = tokenizer(pth, ":");
 	Alength = strlen(str[0]);
 
-	while (tkn[i])
+	while (tkn[i] != NULL)
 	{
 		Tlength = (strlen(tkn[i]) + 2);
 		n_sz = ((Tlength + Alength) * sizeof(char));
 		ol_sz = (strlen(tkn[i] + 1));
 
 		tkn[i] = reallocarray(tkn[i], ol_sz, n_sz);
-		if (tkn == NULL)
+		if (tkn[i] == NULL)
 			return (0);
 
 		strcat(tkn[i], "/");
@@ -35,12 +35,12 @@ int path_f(char **str, char *pth)
 		if (st_t == 0)
 		{
 			str[0] = reallocarray(tkn[0], Alength + 1, n_sz);
-			if (tkn[0] == NULL)
-				return (0);
+			if (str[0] == NULL)
+				return(0);
 
 			strcpy(str[0], tkn[i]);
 			_free(tkn);
-			return (1);
+			break;
 		}
 
 		i++;
@@ -68,7 +68,6 @@ void exit_fx(char **str, char *buf)
 		exit(0);
 	}
 
-
 	exit_stat = atoi(str[1]);
 
 	if (exit_stat > 0)
@@ -88,7 +87,7 @@ else
 }
 
 /**
- *_free- free double pointers
+ *_free- frees double pointers
  *@buf: Buffers to clear
  *
  * Return: void
@@ -115,7 +114,7 @@ char *found_pth(char **env)
 
 	while (env[i])
 	{
-		if (strncmp("PATH", env[i], 4) == 0)
+		if (strncmp("PATH=", env[i], 5) == 0)
 			envg = env[i] + 5;
 
 		i++;

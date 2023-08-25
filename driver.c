@@ -9,9 +9,8 @@
  */
 void _isignal(int sig)
 {
-	(void)sig;
-/*	write(STDOUT_FILENO, "\n$ ", 4);*/
-	exit(EXIT_SUCCESS);
+	if (sig == SIGINT)
+		write(STDOUT_FILENO, "\n($) ", 5);
 }
 
 /**
@@ -40,24 +39,28 @@ int main(int __attribute__((unused))argc, char **argv, char **env)
 		rd_ln = getline(&lineptr, &n, stdin);
 		if (rd_ln == -1)
 		{
-			perror("./hsh");
-			write(STDOUT_FILENO, "\n", 1);
+			if (isatty(STDIN_FILENO))
+				write(STDOUT_FILENO, "\n", 1);
 			break;
 		}
 
-		i = 0;
-		while (lineptr != NULL)
-		{
-			if (lineptr[i] == '\n')
+		if (counter(lineptr) > 0)
+		{	
+
+			i = 0;
+			while (lineptr[i])
 			{
-				lineptr[i] = '\0';
-				break;
+				if (lineptr[i] == '\n')
+				{
+					lineptr[i] = '\0';
+					break;
+				}
+				
+				i++;
 			}
 
-			i++;
+			input_analyzer(lineptr, env);
 		}
-
-		input_analyzer(lineptr, env);
 	}
 
 	free(lineptr);
